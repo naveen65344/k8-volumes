@@ -32,6 +32,8 @@ kind: Pod
 metadata:
   name: my-app
 spec:
+  nodeSelector:
+    topology.kubernetes.io/zone: us-east-1a
   containers:
   - name: my-container
     image: nginx  # Replace with your application image
