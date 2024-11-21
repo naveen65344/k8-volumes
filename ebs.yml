@@ -4,58 +4,12 @@ metadata:
   name: ebs-pv
 spec:
   capacity:
-    storage: 10Gi  # Specify the size of the volume
+    storage: 10Gi  # Specify the size of the volume (10Gi in this case)
   volumeMode: Filesystem
   accessModes:
-    - ReadWriteOnce  # Volume can only be mounted by one pod at a time (read/write access)
-  persistentVolumeReclaimPolicy: Retain  # Retain the volume even after the PVC is deleted
-  storageClassName: ebs-sc  # StorageClass that indicates EBS volume
+    - ReadWriteOnce  # The volume can be mounted by a single pod at a time
+  persistentVolumeReclaimPolicy: Retain  # Keep the EBS volume even if PVC is deleted
+  storageClassName: ebs-sc  # This should match the StorageClass defined in PVC
   awsElasticBlockStore:
-    volumeID: vol-0be1acbb1a14deffc # Replace with your EBS volume ID
-    fsType: ext4  # File system type (ext4 is commonly used)
-
-
-apiVersion: v1
-kind: PersistentVolumeClaim
-metadata:
-  name: ebs-pvc
-spec:
-  accessModes:
-    - ReadWriteOnce  # It must match the access mode of the PV
-  resources:
-    requests:
-      storage: 10Gi  # Size of the volume requested
-  storageClassName: ebs-sc  # This must match the StorageClass in PV
- 
-apiVersion: v1
-kind: Pod
-metadata:
-  name: my-app
-spec:
-  nodeSelector:
-    topology.kubernetes.io/zone: us-east-1a
-  containers:
-  - name: my-container
-    image: nginx  # Replace with your application image
-    volumeMounts:
-    - mountPath: /usr/share/nginx/html # The directory inside the container where the volume will be mounted
-      name: ebs-volume
-  volumes:
-  - name: ebs-volume
-    persistentVolumeClaim:
-      claimName: ebs-pvc  # Reference the PVC created earlier
-
-
-apiVersion: v1
-kind: Service
-metadata:
-  name: my-app-service
-spec:
-  selector:
-    app: my-app  # This should match the pod label
-  ports:
-    - protocol: TCP
-      port: 80  # Port that the service will expose
-      targetPort: 80  # Port the container is listening on
-  type: LoadBalancer  # Expose the service externally if using a cloud provider like AWS
-
+    volumeID: vol-0be1acbb1a14deffc  # Replace with your actual EBS volume ID
+    fsType: ext4  # Filesystem type (ext4 is commonly used)
