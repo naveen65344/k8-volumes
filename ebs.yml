@@ -45,4 +45,18 @@ spec:
   - name: ebs-volume
     persistentVolumeClaim:
       claimName: ebs-pvc  # Reference the PVC created earlier
+
+apiVersion: v1
+kind: Service
+metadata:
+  name: my-app-service
+spec:
+  selector:
+    app: my-app  # This should match the pod label
+  ports:
+    - protocol: TCP
+      port: 80  # Port the service will expose to the outside world
+      targetPort: 80  # Port the container is listening on
+  type: LoadBalancer  # Create an external load balancer if using AWS
+
  
