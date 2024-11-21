@@ -13,7 +13,7 @@ spec:
   awsElasticBlockStore:
     volumeID: vol-0be1acbb1a14deffc  # Replace with your actual EBS volume ID
     fsType: ext4  # Filesystem type (ext4 is commonly used)
-    
+
 apiVersion: v1
 kind: PersistentVolumeClaim
 metadata:
@@ -25,3 +25,24 @@ spec:
     requests:
       storage: 10Gi  # Size of the volume requested
   storageClassName: ebs-sc  # Ensure this matches the StorageClass in the PV
+
+
+
+apiVersion: v1
+kind: Pod
+metadata:
+  name: my-app
+spec:
+  nodeSelector:
+    topology.kubernetes.io/zone: us-east-1a  # Ensure the pod is scheduled in the correct zone (must match EBS volume zone)
+  containers:
+  - name: my-container
+    image: nginx  # Replace with your desired container image
+    volumeMounts:
+    - mountPath: /usr/share/nginx/html  # The directory inside the container where the volume will be mounted
+      name: ebs-volume
+  volumes:
+  - name: ebs-volume
+    persistentVolumeClaim:
+      claimName: ebs-pvc  # Reference the PVC created earlier
+ 
