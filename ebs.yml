@@ -13,3 +13,15 @@ spec:
   awsElasticBlockStore:
     volumeID: vol-0be1acbb1a14deffc  # Replace with your actual EBS volume ID
     fsType: ext4  # Filesystem type (ext4 is commonly used)
+    
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: ebs-pvc
+spec:
+  accessModes:
+    - ReadWriteOnce  # This must match the access mode of the PV
+  resources:
+    requests:
+      storage: 10Gi  # Size of the volume requested
+  storageClassName: ebs-sc  # Ensure this matches the StorageClass in the PV
