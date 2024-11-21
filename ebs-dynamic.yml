@@ -18,7 +18,7 @@ metadata:
     purpose: ebs-dynamic
 spec:
   nodeSelector:
-    topology.kubernetes.io/zone: us-east-1d
+    topology.kubernetes.io/zone: us-east-1a
   containers:
   - name: nginx
     image: nginx
@@ -43,4 +43,4 @@ spec:
     protocol: TCP
     port: 80 # service port
     targetPort: 80 # container port
-    nodePort: 30007
+   
